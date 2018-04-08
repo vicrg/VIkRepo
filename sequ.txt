@@ -1,0 +1,12 @@
+create or replace trigger DISP_CDAS_BANXICO  
+   before insert on "CLOUDAPP"."CDAS_BANXICO" 
+   for each row 
+begin  
+   if inserting then 
+      if :NEW."ID_FOLIO" is null then 
+         select SEQ_CDA_BANXICO.nextval into :NEW."ID_FOLIO" from dual; 
+      end if; 
+   end if; 
+end;
+
+CREATE SEQUENCE  "CLOUDAPP"."SEQ_CDA_BANXICO"  MINVALUE 1 MAXVALUE 99999999 INCREMENT BY 1 START WITH 32142097 NOCACHE  NOORDER  NOCYCLE ;
