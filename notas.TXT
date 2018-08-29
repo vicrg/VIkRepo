@@ -210,7 +210,7 @@ http://wltxoroap04u:20707/spei/login.jsp
 
 UAT
 http://wltxoroap05u.nam.nsroot.net:30707/spei
-http://wltxoroap04u.nam.nsroot.net:30707/spei
+http://wltxoroap04u:30707/spei
 
 http://wltxoroap04u:30705/console/login/LoginForm.jsp
 
@@ -246,3 +246,19 @@ http://wltxplaap02d:50264/spei_UAT/login.jsp x05
 
 Changue para la contraseña
 CHG0002798937 UAT
+
+
+equipo vm-30ea-dd39
+User   jr79480
+pass   ROOT1808
+
+
+/home/jr79480/CPN/12.1
+
+/home/jr79480/Open/c264_010.ear
+
+/home/jr79480/Open/FUENTES_C264_010_20180628
+
+/opt/s622/180/tuxedo/version_web/c264_010.ear
+
+wlssys1s_c264
