@@ -1,0 +1,2055 @@
+SQL> set echo on;
+SQL> 
+SQL> select instance_name,host_name from v$instance;
+
+INSTANCE_NAME    HOST_NAME                                                       
+---------------- ----------------------------------------------------------------
+MXPYG1D          oraas-gt-d38-03.nam.nsroot.net                                  
+
+SQL> alter session set current_schema=PG_BDTT_DBO01;
+
+Session altered.
+
+SQL> select sys_context( 'userenv', 'current_schema' ) "Schema" from dual;
+
+Schema                                                                                                                                                                                                                                                          
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+PG_BDTT_DBO01
+
+SQL> 
+SQL> 
+SQL> --------------------------------------------------------
+SQL> --  DDL for Table CR_CONS
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE TABLE "PG_BDTT_DBO01"."CR_CONS" 
+  2     (	"RFC" VARCHAR2(20 BYTE), 
+  3  	"PASSWD" VARCHAR2(20 BYTE), 
+  4  	"LLAVE" VARCHAR2(1500 BYTE), 
+  5  	"ID_OWNER" NUMBER, 
+  6  	"ID_LY_MARKETS" NUMBER(20,0)
+  7     ) SEGMENT CREATION IMMEDIATE 
+  8    PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+  9    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+ 10    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+ 11    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+Table "PG_BDTT_DBO01"."CR_CONS" created.
+
+SQL> 
+SQL>    COMMENT ON TABLE "PG_BDTT_DBO01"."CR_CONS"  IS 'Certificado de Consulta';
+
+Comment created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Table LG_ANALIST
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE TABLE "PG_BDTT_DBO01"."LG_ANALIST" 
+  2     (	"ID_ANALIST" VARCHAR2(30 BYTE), 
+  3  	"ID_BANAMEX" VARCHAR2(60 BYTE), 
+  4  	"REGISTER_DATE" TIMESTAMP (6) WITH LOCAL TIME ZONE
+  5     ) SEGMENT CREATION IMMEDIATE 
+  6    PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+  7    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  8    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  9    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+Table "PG_BDTT_DBO01"."LG_ANALIST" created.
+
+SQL> 
+SQL>    COMMENT ON TABLE "PG_BDTT_DBO01"."LG_ANALIST"  IS 'Tabla para registro de consultas del Usuario, manejando el Id_bancomer y la fecha.';
+
+Comment created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Table LY_AML
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE TABLE "PG_BDTT_DBO01"."LY_AML" 
+  2     (	"ID_LY_FIU" NUMBER, 
+  3  	"REGISTER_DATE" TIMESTAMP (6) WITH TIME ZONE, 
+  4  	"REQUESTED" CHAR(1 BYTE), 
+  5  	"ID_OWNER" NUMBER
+  6     ) SEGMENT CREATION IMMEDIATE 
+  7    PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+  8    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  9    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+ 10    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+Table "PG_BDTT_DBO01"."LY_AML" created.
+
+SQL> 
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_AML"."REQUESTED" IS 'Campo verificador  si la solicitud ya fue procesada. Values ''Y'' o ''N''';
+
+Comment created.
+
+SQL>    COMMENT ON TABLE "PG_BDTT_DBO01"."LY_AML"  IS 'Encabezado del Layout de AML FIU.';
+
+Comment created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Table LY_AML_DET
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE TABLE "PG_BDTT_DBO01"."LY_AML_DET" 
+  2     (	"GFCID" VARCHAR2(60 BYTE), 
+  3  	"ID_BANAMEX" VARCHAR2(60 BYTE), 
+  4  	"CUSTOMER_NAME" VARCHAR2(256 BYTE), 
+  5  	"TAX_ID" VARCHAR2(256 BYTE), 
+  6  	"NATIONALITY" VARCHAR2(3 BYTE), 
+  7  	"DESTINATION COUNTRY" VARCHAR2(3 BYTE), 
+  8  	"CUSTOMER TYPE" VARCHAR2(200 BYTE), 
+  9  	"RISK" VARCHAR2(256 BYTE), 
+ 10  	"SOEID_MAKER" VARCHAR2(256 BYTE), 
+ 11  	"ID_LY_FIU" NUMBER
+ 12     ) SEGMENT CREATION IMMEDIATE 
+ 13    PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+ 14    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+ 15    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+ 16    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+Table "PG_BDTT_DBO01"."LY_AML_DET" created.
+
+SQL> 
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_AML_DET"."GFCID" IS 'Campo que recibe el valor de GFCID';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_AML_DET"."ID_BANAMEX" IS 'Campo que recibe el valor de Banamex id';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_AML_DET"."CUSTOMER_NAME" IS 'Campo que recibe el valor de Nombre del cliente';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_AML_DET"."TAX_ID" IS 'Campo que recibe el valor de Tax_Id';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_AML_DET"."NATIONALITY" IS 'Campo que recibe el valor de Pais de Constitución NATIONALITY';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_AML_DET"."DESTINATION COUNTRY" IS 'Campo que recibe el valor de Pais de destino de Transferencias';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_AML_DET"."CUSTOMER TYPE" IS 'Campo que recibe el valor de Tipo de Cliente (Según Ingresos)';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_AML_DET"."RISK" IS 'Campo que recibe el valor de Riesgo';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_AML_DET"."SOEID_MAKER" IS 'Campo que recibe el valor de SOEID MAKER';
+
+Comment created.
+
+SQL>    COMMENT ON TABLE "PG_BDTT_DBO01"."LY_AML_DET"  IS 'Detalle de Layout de ICG.';
+
+Comment created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Table LY_CCB
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE TABLE "PG_BDTT_DBO01"."LY_CCB" 
+  2     (	"ID_LY_CCB" NUMBER, 
+  3  	"REGISTER_DATE" TIMESTAMP (6) WITH TIME ZONE, 
+  4  	"REQUESTED" CHAR(1 BYTE), 
+  5  	"ID_OWNER" NUMBER
+  6     ) SEGMENT CREATION IMMEDIATE 
+  7    PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+  8    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  9    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+ 10    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+Table "PG_BDTT_DBO01"."LY_CCB" created.
+
+SQL> 
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_CCB"."REGISTER_DATE" IS 'Fecha de Registro';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_CCB"."REQUESTED" IS 'Campo verificador  si la solicitud ya fue procesada. Values ''Y'' o ''N''';
+
+Comment created.
+
+SQL>    COMMENT ON TABLE "PG_BDTT_DBO01"."LY_CCB"  IS 'Encabezado del Layout de CCB.';
+
+Comment created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Table LY_CCB_DET
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE TABLE "PG_BDTT_DBO01"."LY_CCB_DET" 
+  2     (	"GFCID" VARCHAR2(60 BYTE), 
+  3  	"ID_BANAMEX" VARCHAR2(60 BYTE), 
+  4  	"CUSTOMER_NAME" VARCHAR2(256 BYTE), 
+  5  	"TAX_ID" VARCHAR2(256 BYTE), 
+  6  	"NATIONALITY" VARCHAR2(3 BYTE), 
+  7  	"DESTINATION COUNTRY" VARCHAR2(3 BYTE), 
+  8  	"CUSTOMER TYPE" VARCHAR2(200 BYTE), 
+  9  	"RISK" VARCHAR2(256 BYTE), 
+ 10  	"SOEID_MAKER" VARCHAR2(256 BYTE), 
+ 11  	"ID_LY_CCB" NUMBER
+ 12     ) SEGMENT CREATION IMMEDIATE 
+ 13    PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+ 14    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+ 15    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+ 16    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+Table "PG_BDTT_DBO01"."LY_CCB_DET" created.
+
+SQL> 
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_CCB_DET"."GFCID" IS 'Campo que recibe el valor de GFCID';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_CCB_DET"."ID_BANAMEX" IS 'Campo que recibe el valor de Banamex id';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_CCB_DET"."CUSTOMER_NAME" IS 'Campo que recibe el valor de Nombre del cliente';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_CCB_DET"."TAX_ID" IS 'Campo que recibe el valor de Tax_Id';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_CCB_DET"."NATIONALITY" IS 'Campo que recibe el valor de Pais de Constitución';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_CCB_DET"."DESTINATION COUNTRY" IS 'Campo que recibe el valor de Pais de destino de Transferencias';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_CCB_DET"."CUSTOMER TYPE" IS 'Campo que recibe el valor de Tipo de Cliente (Según Ingresos)';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_CCB_DET"."RISK" IS 'Campo que recibe el valor de Riesgo';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_CCB_DET"."SOEID_MAKER" IS 'Campo que recibe el valor de SOEID MAKER';
+
+Comment created.
+
+SQL>    COMMENT ON TABLE "PG_BDTT_DBO01"."LY_CCB_DET"  IS 'Detalle de Layout de CCB.';
+
+Comment created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Table LY_ICG
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE TABLE "PG_BDTT_DBO01"."LY_ICG" 
+  2     (	"ID_LY_ICG" NUMBER, 
+  3  	"REGISTER_DATE" TIMESTAMP (6) WITH TIME ZONE, 
+  4  	"REQUESTED" CHAR(1 BYTE), 
+  5  	"ID_OWNER" NUMBER
+  6     ) SEGMENT CREATION IMMEDIATE 
+  7    PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+  8    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  9    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+ 10    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+Table "PG_BDTT_DBO01"."LY_ICG" created.
+
+SQL> 
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_ICG"."REQUESTED" IS 'Campo verificador  si la solicitud ya fue procesada. Values ''Y'' o ''N''';
+
+Comment created.
+
+SQL>    COMMENT ON TABLE "PG_BDTT_DBO01"."LY_ICG"  IS 'Encabezado del Layout de ICG.';
+
+Comment created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Table LY_ICG_DET
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE TABLE "PG_BDTT_DBO01"."LY_ICG_DET" 
+  2     (	"GFCID" VARCHAR2(60 BYTE), 
+  3  	"ID_BANAMEX" VARCHAR2(60 BYTE), 
+  4  	"CUSTOMER_NAME" VARCHAR2(256 BYTE), 
+  5  	"TAX_ID" VARCHAR2(256 BYTE), 
+  6  	"NATIONALITY" VARCHAR2(3 BYTE), 
+  7  	"DESTINATION COUNTRY" VARCHAR2(3 BYTE), 
+  8  	"CUSTOMER TYPE" VARCHAR2(200 BYTE), 
+  9  	"RISK" VARCHAR2(256 BYTE), 
+ 10  	"SOEID_MAKER" VARCHAR2(256 BYTE), 
+ 11  	"ID_LY_ICG" NUMBER
+ 12     ) SEGMENT CREATION IMMEDIATE 
+ 13    PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+ 14    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+ 15    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+ 16    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+Table "PG_BDTT_DBO01"."LY_ICG_DET" created.
+
+SQL> 
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_ICG_DET"."GFCID" IS 'Campo que recibe el valor de GFCID';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_ICG_DET"."ID_BANAMEX" IS 'Campo que recibe el valor de Banamex id';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_ICG_DET"."CUSTOMER_NAME" IS 'Campo que recibe el valor de Nombre del cliente';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_ICG_DET"."TAX_ID" IS 'Campo que recibe el valor de Tax_Id';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_ICG_DET"."NATIONALITY" IS 'Campo que recibe el valor de Pais de Constitución NATIONALITY';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_ICG_DET"."DESTINATION COUNTRY" IS 'Campo que recibe el valor de Pais de destino de Transferencias';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_ICG_DET"."CUSTOMER TYPE" IS 'Campo que recibe el valor de Tipo de Cliente (Según Ingresos)';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_ICG_DET"."RISK" IS 'Campo que recibe el valor de Riesgo';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_ICG_DET"."SOEID_MAKER" IS 'Campo que recibe el valor de SOEID MAKER';
+
+Comment created.
+
+SQL>    COMMENT ON TABLE "PG_BDTT_DBO01"."LY_ICG_DET"  IS 'Detalle de Layout de ICG.';
+
+Comment created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Table LY_MARKETS
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE TABLE "PG_BDTT_DBO01"."LY_MARKETS" 
+  2     (	"ID_LY_MARKETS" NUMBER, 
+  3  	"REGISTER_DATE" TIMESTAMP (6) WITH TIME ZONE, 
+  4  	"REQUESTED" CHAR(1 BYTE), 
+  5  	"ID_OWNER" NUMBER
+  6     ) SEGMENT CREATION IMMEDIATE 
+  7    PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+  8    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  9    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+ 10    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+Table "PG_BDTT_DBO01"."LY_MARKETS" created.
+
+SQL> 
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_MARKETS"."REGISTER_DATE" IS 'Fecha de Registro';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_MARKETS"."REQUESTED" IS 'Campo verificador  si la solicitud ya fue procesada. Values ''Y'' o ''N''';
+
+Comment created.
+
+SQL>    COMMENT ON TABLE "PG_BDTT_DBO01"."LY_MARKETS"  IS 'Encabezado del Layout de MARKETS.';
+
+Comment created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Table LY_MARKETS_DET
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE TABLE "PG_BDTT_DBO01"."LY_MARKETS_DET" 
+  2     (	"ID_CLIENTE" VARCHAR2(60 BYTE), 
+  3  	"ID_BANXICO" VARCHAR2(60 BYTE), 
+  4  	"CTEORDTYPE" NUMBER(10,0), 
+  5  	"BUSINESS_NAME" VARCHAR2(256 BYTE), 
+  6  	"FATHER_S_NAME" VARCHAR2(256 BYTE), 
+  7  	"MOTHER_S_NAME" VARCHAR2(256 BYTE), 
+  8  	"FIRST_NAME" VARCHAR2(100 BYTE), 
+  9  	"NATIONALITY" VARCHAR2(3 BYTE), 
+ 10  	"BIRTHDATE" DATE, 
+ 11  	"ID_LY_MARKETS" NUMBER, 
+ 12  	"RESGISTER_DATE" TIMESTAMP (6) WITH TIME ZONE
+ 13     ) SEGMENT CREATION IMMEDIATE 
+ 14    PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+ 15    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+ 16    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+ 17    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+Table "PG_BDTT_DBO01"."LY_MARKETS_DET" created.
+
+SQL> 
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_MARKETS_DET"."ID_CLIENTE" IS 'campo que recibe el Valor NumCte';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_MARKETS_DET"."ID_BANXICO" IS 'Campo que recibe el valor de IDCteOrd';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_MARKETS_DET"."CTEORDTYPE" IS 'Campo que recibe el valor de TipoCteOrd';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_MARKETS_DET"."BUSINESS_NAME" IS 'Campo que recibe el valor de RazónSocial';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_MARKETS_DET"."FATHER_S_NAME" IS 'Campo que recibe el valor de ApPaterno';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_MARKETS_DET"."MOTHER_S_NAME" IS 'Campo que recibe el valor de ApMaterno';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_MARKETS_DET"."FIRST_NAME" IS 'Campo que recibe el valor de Nombre';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_MARKETS_DET"."NATIONALITY" IS 'Campo que recibe el valor de NacPaisCons';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_MARKETS_DET"."BIRTHDATE" IS 'Campo que recibe el valor de FechaNacCon';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_MARKETS_DET"."ID_LY_MARKETS" IS 'id de relacion con encabezado';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."LY_MARKETS_DET"."RESGISTER_DATE" IS 'Fecha de Registro';
+
+Comment created.
+
+SQL>    COMMENT ON TABLE "PG_BDTT_DBO01"."LY_MARKETS_DET"  IS 'Detalle de Layout de MARKETS';
+
+Comment created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Table RE_BDTT_BCK
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE TABLE "PG_BDTT_DBO01"."RE_BDTT_BCK" 
+  2     (	"ID_BANAMEX" VARCHAR2(60 BYTE), 
+  3  	"ID_BANXICO" VARCHAR2(60 BYTE), 
+  4  	"ID_RE_BDTT_BCK" NUMBER, 
+  5  	"TIPO_CLIENTE_ORIGINADOR" NUMBER(1,0), 
+  6  	"NACIONALIDAD" VARCHAR2(2 BYTE), 
+  7  	"TAX_ID" VARCHAR2(256 BYTE), 
+  8  	"PAIS_TAX_ID" VARCHAR2(256 BYTE), 
+  9  	"NUM_BCOS_ORDENO_TRANSFER" NUMBER(1,0), 
+ 10  	"NUM_BCOS_DIFERENTES_ENVIOS" NUMBER(1,0), 
+ 11  	"LISTA_PAISES_DESTINOS_ENVIOS" VARCHAR2(256 BYTE), 
+ 12  	"NUM_TOTAL_TRANSFERENCIAS" NUMBER(3,0), 
+ 13  	"DIVISAS_MAS_OPERADAS" VARCHAR2(256 BYTE), 
+ 14  	"LISTA_OTRAS_DIVISAS" VARCHAR2(256 BYTE), 
+ 15  	"NIVEL_MONTO_TOTAL_DLLS" NUMBER(20,6), 
+ 16  	"MONTO_TOTAL_DLLS" NUMBER, 
+ 17  	"NUM_DIAS_HUBO_ENVIOS" NUMBER(6,0), 
+ 18  	"NUM_DIAS_NAT_ULT_ENVIO" NUMBER(6,0), 
+ 19  	"NUM_CTAS_DIF_ENVIOS" NUMBER(3,0), 
+ 20  	"PORC_TOT_VS_MAYOR_NUM_ENV" NUMBER(20,6), 
+ 21  	"PORC_TOT_VS_MAYOR_MONTO" NUMBER(20,6), 
+ 22  	"MONTO_PROM_X_USD" NUMBER(20,6), 
+ 23  	"MONTO_PROM_X_EUR" NUMBER(20,6), 
+ 24  	"MONTO_PROM_X_CAD" NUMBER(20,6), 
+ 25  	"MONTO_PROM_X_GBP" NUMBER(20,6), 
+ 26  	"MONTO_PROM_X_JPY" NUMBER(20,6), 
+ 27  	"MONTO_PROM_X_CHF" NUMBER(20,6), 
+ 28  	"MONTO_PROM_X_MXN" NUMBER(20,6), 
+ 29  	"MONTO_PROM_X_AUD" NUMBER(20,6), 
+ 30  	"MONTO_PROM_X_SEK" NUMBER(20,6), 
+ 31  	"MONTO_PROM_X_DKK" NUMBER(20,6), 
+ 32  	"MONTO_PROM_X_CNY" NUMBER(20,6), 
+ 33  	"MONTO_PROM_X_OTRAS" NUMBER(20,6), 
+ 34  	"MODA_MONTO_X_USD" NUMBER(20,6), 
+ 35  	"MODA_MONTO_X_EUR" NUMBER(20,6), 
+ 36  	"MODA_MONTO_X_CAD" NUMBER(20,6), 
+ 37  	"MODA_MONTO_X_GBP" NUMBER(20,6), 
+ 38  	"MODA_MONTO_X_JPY" NUMBER(20,6), 
+ 39  	"MODA_MONTO_X_CHF" NUMBER(20,6), 
+ 40  	"MODA_MONTO_X_MXN" NUMBER(20,6), 
+ 41  	"MODA_MONTO_X_AUD" NUMBER(20,6), 
+ 42  	"MODA_MONTO_X_SEK" NUMBER(20,6), 
+ 43  	"MODA_MONTO_X_DKK" NUMBER(20,6), 
+ 44  	"MODA_MONTO_X_CNY" NUMBER(20,6), 
+ 45  	"MODA_MONTO_X_OTRAS" NUMBER(20,6), 
+ 46  	"NUM_ENV_MODAL_X_USD" NUMBER(2,0), 
+ 47  	"NUM_ENV_MODAL_X_EUR" NUMBER(2,0), 
+ 48  	"NUM_ENV_MODAL_X_CAD" NUMBER(2,0), 
+ 49  	"NUM_ENV_MODAL_X_GBP" NUMBER(2,0), 
+ 50  	"NUM_ENV_MODAL_X_JPY" NUMBER(2,0), 
+ 51  	"NUM_ENV_MODAL_X_CHF" NUMBER(2,0), 
+ 52  	"NUM_ENV_MODAL_X_MXN" NUMBER(2,0), 
+ 53  	"NUM_ENV_MODAL_X_AUD" NUMBER(2,0), 
+ 54  	"NUM_ENV_MODAL_X_SEK" NUMBER(2,0), 
+ 55  	"NUM_ENV_MODAL_X_DKK" NUMBER(2,0), 
+ 56  	"NUM_ENV_MODAL_X_CNY" NUMBER(2,0), 
+ 57  	"NUM_ENV_MODAL_X_OTRAS" NUMBER(2,0), 
+ 58  	"DISTRIB_RANGO1_USD" NUMBER(1,0), 
+ 59  	"DISTRIB_RANGO2_USD" NUMBER(1,0), 
+ 60  	"DISTRIB_RANGO3_USDC" NUMBER(1,0), 
+ 61  	"DISTRIB_RANGO4_USD" NUMBER(1,0), 
+ 62  	"DISTRIB_RANGO5_USD" NUMBER(1,0), 
+ 63  	"DISTRIB_RANGO6_USD" NUMBER(1,0), 
+ 64  	"DISTRIB_RANGO7_USD" NUMBER(1,0), 
+ 65  	"DISTRIB_RANGO1_EUR" NUMBER(1,0), 
+ 66  	"DISTRIB_RANGO2_EUR" NUMBER(1,0), 
+ 67  	"DISTRIB_RANGO3_EUR" NUMBER(1,0), 
+ 68  	"DISTRIB_RANGO4_EUR" NUMBER(1,0), 
+ 69  	"DISTRIB_RANGO5_EUR" NUMBER(1,0), 
+ 70  	"DISTRIB_RANGO6_EUR" NUMBER(1,0), 
+ 71  	"DISTRIB_RANGO7_EUR" NUMBER(1,0), 
+ 72  	"DISTRIB_RANGO1_CAD" NUMBER(1,0), 
+ 73  	"DISTRIB_RANGO2_CAD" NUMBER(1,0), 
+ 74  	"DISTRIB_RANGO3_CAD" NUMBER(1,0), 
+ 75  	"DISTRIB_RANGO4_CAD" NUMBER(1,0), 
+ 76  	"DISTRIB_RANGO5_CAD" NUMBER(1,0), 
+ 77  	"DISTRIB_RANGO6_CAD" NUMBER(1,0), 
+ 78  	"DISTRIB_RANGO7_CAD" NUMBER(1,0), 
+ 79  	"DISTRIB_RANGO1_GBP" NUMBER(1,0), 
+ 80  	"DISTRIB_RANGO2_GBP" NUMBER(1,0), 
+ 81  	"DISTRIB_RANGO3_GBP" NUMBER(1,0), 
+ 82  	"DISTRIB_RANGO4_GBP" NUMBER(1,0), 
+ 83  	"DISTRIB_RANGO5_GBP" NUMBER(1,0), 
+ 84  	"DISTRIB_RANGO6_GBP" NUMBER(1,0), 
+ 85  	"DISTRIB_RANGO7_GBP" NUMBER(1,0), 
+ 86  	"DISTRIB_RANGO1_JPY" NUMBER(1,0), 
+ 87  	"DISTRIB_RANGO2_JPY" NUMBER(2,0), 
+ 88  	"DISTRIB_RANGO3_JPY" NUMBER(1,0), 
+ 89  	"DISTRIB_RANGO4_JPY" NUMBER(1,0), 
+ 90  	"DISTRIB_RANGO5_JPY" NUMBER(1,0), 
+ 91  	"DISTRIB_RANGO6_JPY" NUMBER(1,0), 
+ 92  	"DISTRIB_RANGO7_JPY" NUMBER(1,0), 
+ 93  	"DISTRIB_RANGO1_CHF" NUMBER(1,0), 
+ 94  	"DISTRIB_RANGO2_CHF" NUMBER(1,0), 
+ 95  	"DISTRIB_RANGO3_CHF" NUMBER(1,0), 
+ 96  	"DISTRIB_RANGO4_CHF" NUMBER(1,0), 
+ 97  	"DISTRIB_RANGO5_CHF" NUMBER(1,0), 
+ 98  	"DISTRIB_RANGO6_CHF" NUMBER(1,0), 
+ 99  	"DISTRIB_RANGO7_CHF" NUMBER(1,0), 
+100  	"DISTRIB_RANGO1_MXN" NUMBER(1,0), 
+101  	"DISTRIB_RANGO2_MXN" NUMBER(1,0), 
+102  	"DISTRIB_RANGO3_MXN" NUMBER(1,0), 
+103  	"DISTRIB_RANGO4_MXN" NUMBER(1,0), 
+104  	"DISTRIB_RANGO5_MXN" NUMBER(1,0), 
+105  	"DISTRIB_RANGO6_MXN" NUMBER(1,0), 
+106  	"DISTRIB_RANGO7_MXN" NUMBER(1,0), 
+107  	"DISTRIB_RANGO1_AUDC" NUMBER(1,0), 
+108  	"DISTRIB_RANGO2_AUD" NUMBER(1,0), 
+109  	"DISTRIB_RANGO3_AUD" NUMBER(1,0), 
+110  	"DISTRIB_RANGO4_AUD" NUMBER(1,0), 
+111  	"DISTRIB_RANGO5_AUD" NUMBER(1,0), 
+112  	"DISTRIB_RANGO6_AUD" NUMBER(1,0), 
+113  	"DISTRIB_RANGO7_AUD" NUMBER(1,0), 
+114  	"DISTRIB_RANGO1_SEK" NUMBER(1,0), 
+115  	"DISTRIB_RANGO2_SEK" NUMBER(1,0), 
+116  	"DISTRIB_RANGO3_SEK" NUMBER(1,0), 
+117  	"DISTRIB_RANGO4_SEK" NUMBER(1,0), 
+118  	"DISTRIB_RANGO5_SEK" NUMBER(1,0), 
+119  	"DISTRIB_RANGO6_SEK" NUMBER(1,0), 
+120  	"DISTRIB_RANGO7_SEK" NUMBER(1,0), 
+121  	"DISTRIB_RANGO1_DKK" NUMBER(1,0), 
+122  	"DISTRIB_RANGO2_DKK" NUMBER(1,0), 
+123  	"DISTRIB_RANGO3_DKK" NUMBER(1,0), 
+124  	"DISTRIB_RANGO4_DKK" NUMBER(1,0), 
+125  	"DISTRIB_RANGO5_DKK" NUMBER(1,0), 
+126  	"DISTRIB_RANGO6_DKK" NUMBER(1,0), 
+127  	"DISTRIB_RANGO7_DKK" NUMBER(1,0), 
+128  	"DISTRIB_RANGO1_CNY" NUMBER(1,0), 
+129  	"DISTRIB_RANGO2_CNY" NUMBER(1,0), 
+130  	"DISTRIB_RANGO3_CNY" NUMBER(1,0), 
+131  	"DISTRIB_RANGO4_CNY" NUMBER(1,0), 
+132  	"DISTRIB_RANGO5_CNY" NUMBER(1,0), 
+133  	"DISTRIB_RANGO6_CNY" NUMBER(1,0), 
+134  	"DISTRIB_RANGO7_CNY" NUMBER(1,0), 
+135  	"DISTRIB_RANGO1_OTRAS" NUMBER(1,0), 
+136  	"DISTRIB_RANGO2_OTRAS" NUMBER(1,0), 
+137  	"DISTRIB_RANGO3_OTRAS" NUMBER(1,0), 
+138  	"DISTRIB_RANGO4_OTRAS" NUMBER(1,0), 
+139  	"DISTRIB_RANGO5_OTRAS" NUMBER(1,0), 
+140  	"DISTRIB_RANGO6_OTRAS" NUMBER(1,0), 
+141  	"DISTRIB_RANGO7_OTRAS" NUMBER(1,0), 
+142  	"DISTRIB_RANGO1_EUROC" NUMBER(1,0), 
+143  	"DISTRIB_RANGO2_EURO" NUMBER(2,0), 
+144  	"DISTRIB_RANGO3_EURO" NUMBER(1,0), 
+145  	"DISTRIB_RANGO4_EURO" NUMBER(1,0), 
+146  	"DISTRIB_RANGO5_EURO" NUMBER(1,0), 
+147  	"DISTRIB_RANGO6_EURO" NUMBER(1,0), 
+148  	"DISTRIB_RANGO7_EURO" NUMBER(1,0)
+149     ) SEGMENT CREATION IMMEDIATE 
+150    PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+151    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+152    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+153    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+Table "PG_BDTT_DBO01"."RE_BDTT_BCK" created.
+
+SQL> 
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."ID_BANAMEX" IS 'Id Cliente Banamex';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."ID_BANXICO" IS 'ID_CLIENTE_ORIGINADOR';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."ID_RE_BDTT_BCK" IS 'Identificador unico por consulta';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."TIPO_CLIENTE_ORIGINADOR" IS 'Tipo de cliente originador, persona física (1) o persona moral (2).';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."NACIONALIDAD" IS 'Nacionalidad del cliente originador: Nacional, Extranjero.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."TAX_ID" IS 'Clave extranjera del originador.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."PAIS_TAX_ID" IS 'Clave ISO del país.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."NUM_BCOS_ORDENO_TRANSFER" IS 'Número de bancos nacionales desde los que ordenó transferencias.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."NUM_BCOS_DIFERENTES_ENVIOS" IS 'Número de bancos extranjeros a los que el cliente destinó transferencias.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."LISTA_PAISES_DESTINOS_ENVIOS" IS 'Lista de países a los que el cliente destinó sus envíos.
+  2  Cada país estará separado con un caracter pipe "|".';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."NUM_TOTAL_TRANSFERENCIAS" IS 'Número de transferencias instruidas por el cliente en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DIVISAS_MAS_OPERADAS" IS 'Lista de las divisas más operadas por el cliente en el periodo.
+  2  Cada nombre de divisa estará separado con un caracter pipe "|".';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."LISTA_OTRAS_DIVISAS" IS 'Lista de divisas a los que el cliente destinó sus envíos y no pertenece al grupo de divisas más representativas.
+  2  Cada país estará separado con un caracter pipe "|".';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."NIVEL_MONTO_TOTAL_DLLS" IS 'Indica el nivel de transaccionalidad del cliente, conforme al monto total enviado por el cliente en el periodo';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."MONTO_TOTAL_DLLS" IS 'Indica el monto total enviado por el cliente en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."NUM_DIAS_HUBO_ENVIOS" IS 'Número de días del periodo en los que el cliente instruyó transferencias.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."NUM_DIAS_NAT_ULT_ENVIO" IS 'Número de días naturales desde que el cliente instruyó su última transferencia.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."NUM_CTAS_DIF_ENVIOS" IS 'Número de cuentas distintas a los que el cliente destinó sus envíos.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."PORC_TOT_VS_MAYOR_NUM_ENV" IS 'Porcentaje del número total de envíos destinados a la cuenta del beneficiario al que se envió el mayor número de envíos.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."PORC_TOT_VS_MAYOR_MONTO" IS 'Porcentaje del monto total de envíos destinados a la cuenta del beneficiario al que se envió el mayor monto.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."MONTO_PROM_X_USD" IS 'Monto promedio operado por el cliente con USD en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."MONTO_PROM_X_EUR" IS 'Monto promedio operado por el cliente con EUR en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."MONTO_PROM_X_CAD" IS 'Monto promedio operado por el cliente con CAD en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."MONTO_PROM_X_GBP" IS 'Monto promedio operado por el cliente con GBP en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."MONTO_PROM_X_JPY" IS 'Monto promedio operado por el cliente con JPY en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."MONTO_PROM_X_CHF" IS 'Monto promedio operado por el cliente con CHF en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."MONTO_PROM_X_MXN" IS 'Monto promedio operado por el cliente con MXN en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."MONTO_PROM_X_AUD" IS 'Monto promedio operado por el cliente con AUD en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."MONTO_PROM_X_SEK" IS 'Monto promedio operado por el cliente con SEK en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."MONTO_PROM_X_DKK" IS 'Monto promedio operado por el cliente con DKK en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."MONTO_PROM_X_CNY" IS 'Monto promedio operado por el cliente con CNY en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."MONTO_PROM_X_OTRAS" IS 'Monto promedio operado por el cliente con aquellas divisas que no pertenecen al grupo de divisas más representativas.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."MODA_MONTO_X_USD" IS 'Moda del monto enviado con USD en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."MODA_MONTO_X_EUR" IS 'Moda del monto enviado con EUR en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."MODA_MONTO_X_CAD" IS 'Moda del monto enviado con CAD en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."MODA_MONTO_X_GBP" IS 'Moda del monto enviado con GBP en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."MODA_MONTO_X_JPY" IS 'Moda del monto enviado con JPY en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."MODA_MONTO_X_CHF" IS 'Moda del monto enviado con CHF en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."MODA_MONTO_X_MXN" IS 'Moda del monto enviado con MXN en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."MODA_MONTO_X_AUD" IS 'Moda del monto enviado con AUD en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."MODA_MONTO_X_SEK" IS 'Moda del monto enviado con SEK en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."MODA_MONTO_X_DKK" IS 'Moda del monto enviado con DKK en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."MODA_MONTO_X_CNY" IS 'Moda del monto enviado con CNY en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."MODA_MONTO_X_OTRAS" IS 'Moda del monto enviado por el cliente con aquellas divisas que no pertenecen al grupo de divisas más representativas.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."NUM_ENV_MODAL_X_USD" IS 'Número de envíos del monto modal con USD en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."NUM_ENV_MODAL_X_EUR" IS 'Número de envíos del monto modal con EUR en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."NUM_ENV_MODAL_X_CAD" IS 'Número de envíos del monto modal con CAD en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."NUM_ENV_MODAL_X_GBP" IS 'Número de envíos del monto modal con GBP en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."NUM_ENV_MODAL_X_JPY" IS 'Número de envíos del monto modal con JPY en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."NUM_ENV_MODAL_X_CHF" IS 'Número de envíos del monto modal con CHF en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."NUM_ENV_MODAL_X_MXN" IS 'Número de envíos del monto modal con MXN en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."NUM_ENV_MODAL_X_AUD" IS 'Número de envíos del monto modal con AUD en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."NUM_ENV_MODAL_X_SEK" IS 'Número de envíos del monto modal con SEK en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."NUM_ENV_MODAL_X_DKK" IS 'Número de envíos del monto modal con DKK en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."NUM_ENV_MODAL_X_CNY" IS 'Número de envíos del monto modal con CNY en el periodo.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."NUM_ENV_MODAL_X_OTRAS" IS 'Número de envíos del monto modal con aquellas divisas que no pertenecen al grupo de divisas más representativas.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO1_USD" IS 'Rango 1 de operaciones en USD.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO2_USD" IS 'Rango 2 de operaciones en USD.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO3_USDC" IS 'Rango 3 de operaciones en USD.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO4_USD" IS 'Rango 4 de operaciones en USD.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO5_USD" IS 'Rango 5 de operaciones en USD.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO6_USD" IS 'Rango 6 de operaciones en USD.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO7_USD" IS 'Rango 7 de operaciones en USD.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO1_EUR" IS 'Rango 1 de operaciones en EUR.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO2_EUR" IS 'Rango 2 de operaciones en EUR.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO3_EUR" IS 'Rango 3 de operaciones en EUR.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO4_EUR" IS 'Rango 4 de operaciones en EUR.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO5_EUR" IS 'Rango 5 de operaciones en EUR.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO6_EUR" IS 'Rango 6 de operaciones en EUR.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO7_EUR" IS 'Rango 7 de operaciones en EUR.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO1_CAD" IS 'Rango 1 de operaciones en CAD.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO2_CAD" IS 'Rango 2 de operaciones en CAD.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO3_CAD" IS 'Rango 3 de operaciones en CAD.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO4_CAD" IS 'Rango 4 de operaciones en CAD.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO5_CAD" IS 'Rango 5 de operaciones en CAD.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO6_CAD" IS 'Rango 6 de operaciones en CAD.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO7_CAD" IS 'Rango 7 de operaciones en CAD.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO1_GBP" IS 'Rango 1 de operaciones en GBP.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO2_GBP" IS 'Rango 2 de operaciones en GBP.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO3_GBP" IS 'Rango 3 de operaciones en GBP.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO4_GBP" IS 'Rango 4 de operaciones en GBP.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO5_GBP" IS 'Rango 5 de operaciones en GBP.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO6_GBP" IS 'Rango 6 de operaciones en GBP.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO7_GBP" IS 'Rango 7 de operaciones en GBP.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO1_JPY" IS 'Rango 1 de operaciones en JPY.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO2_JPY" IS 'Rango 2 de operaciones en JPY.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO3_JPY" IS 'Rango 3 de operaciones en JPY.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO4_JPY" IS 'Rango 4 de operaciones en JPY.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO5_JPY" IS 'Rango 5 de operaciones en JPY.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO6_JPY" IS 'Rango 6 de operaciones en JPY.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO7_JPY" IS 'Rango 7 de operaciones en JPY.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO1_CHF" IS 'Rango 1 de operaciones en CHF.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO2_CHF" IS 'Rango 2 de operaciones en CHF.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO3_CHF" IS 'Rango 3 de operaciones en CHF.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO4_CHF" IS 'Rango 4 de operaciones en CHF.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO5_CHF" IS 'Rango 5 de operaciones en CHF.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO6_CHF" IS 'Rango 6 de operaciones en CHF.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO7_CHF" IS 'Rango 7 de operaciones en CHF.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO1_MXN" IS 'Rango 1 de operaciones en MXN.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO2_MXN" IS 'Rango 2 de operaciones en MXN.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO3_MXN" IS 'Rango 3 de operaciones en MXN.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO4_MXN" IS 'Rango 4 de operaciones en MXN.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO5_MXN" IS 'Rango 5 de operaciones en MXN.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO6_MXN" IS 'Rango 6 de operaciones en MXN.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO7_MXN" IS 'Rango 7 de operaciones en MXN.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO1_AUDC" IS 'Rango 1 de operaciones en AUD.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO2_AUD" IS 'Rango 2 de operaciones en AUD.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO3_AUD" IS 'Rango 3 de operaciones en AUD.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO4_AUD" IS 'Rango 4 de operaciones en AUD.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO5_AUD" IS 'Rango 5 de operaciones en AUD.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO6_AUD" IS 'Rango 6 de operaciones en AUD.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO7_AUD" IS 'Rango 7 de operaciones en AUD.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO1_SEK" IS 'Rango 1 de operaciones en SEK.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO2_SEK" IS 'Rango 2 de operaciones en SEK.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO3_SEK" IS 'Rango 3 de operaciones en SEK.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO4_SEK" IS 'Rango 4 de operaciones en SEK.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO5_SEK" IS 'Rango 5 de operaciones en SEK.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO6_SEK" IS 'Rango 6 de operaciones en SEK.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO7_SEK" IS 'Rango 7 de operaciones en SEK.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO1_DKK" IS 'Rango 1 de operaciones en DKK.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO2_DKK" IS 'Rango 2 de operaciones en DKK.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO3_DKK" IS 'Rango 3 de operaciones en DKK.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO4_DKK" IS 'Rango 4 de operaciones en DKK.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO5_DKK" IS 'Rango 5 de operaciones en DKK.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO6_DKK" IS 'Rango 6 de operaciones en DKK.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO7_DKK" IS 'Rango 7 de operaciones en DKK.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO1_CNY" IS 'Rango 1 de operaciones en CNY.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO2_CNY" IS 'Rango 2 de operaciones en CNY.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO3_CNY" IS 'Rango 3 de operaciones en CNY.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO4_CNY" IS 'Rango 4 de operaciones en CNY.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO5_CNY" IS 'Rango 5 de operaciones en CNY.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO6_CNY" IS 'Rango 6 de operaciones en CNY.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO7_CNY" IS 'Rango 7 de operaciones en CNY.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO1_OTRAS" IS 'Rango 1 de operaciones para aquellas divisas que no pertenecen al grupo de divisas más representativas.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO2_OTRAS" IS 'Rango 2 de operaciones para aquellas divisas que no pertenecen al grupo de divisas más representativas.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO3_OTRAS" IS 'Rango 3 de operaciones para aquellas divisas que no pertenecen al grupo de divisas más representativas.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO4_OTRAS" IS 'Rango 4 de operaciones para aquellas divisas que no pertenecen al grupo de divisas más representativas.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO5_OTRAS" IS 'Rango 5 de operaciones para aquellas divisas que no pertenecen al grupo de divisas más representativas.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO6_OTRAS" IS 'Rango 6 de operaciones para aquellas divisas que no pertenecen al grupo de divisas más representativas.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO7_OTRAS" IS 'Rango 7 de operaciones para aquellas divisas que no pertenecen al grupo de divisas más representativas.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO1_EUROC" IS 'Rango 1 de operaciones en EUR.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO2_EURO" IS 'Rango 2 de operaciones en EUR.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO3_EURO" IS 'Rango 3 de operaciones en EUR.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO4_EURO" IS 'Rango 4 de operaciones en EUR.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO5_EURO" IS 'Rango 5 de operaciones en EUR.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO6_EURO" IS 'Rango 6 de operaciones en EUR.';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK"."DISTRIB_RANGO7_EURO" IS 'Rango 7 de operaciones en EUR.';
+
+Comment created.
+
+SQL>    COMMENT ON TABLE "PG_BDTT_DBO01"."RE_BDTT_BCK"  IS 'Tabla para guardar la informacion obtenidad de Banxico,  segun el recuest de MARKETS';
+
+Comment created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Table RE_BDTT_BCK_ENC
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE TABLE "PG_BDTT_DBO01"."RE_BDTT_BCK_ENC" 
+  2     (	"ID_RE_BDTT_BCK" NUMBER, 
+  3  	"BDTT_BCK_DATE" TIMESTAMP (6) WITH LOCAL TIME ZONE, 
+  4  	"APPLICATION_DATE" TIMESTAMP (6) WITH TIME ZONE, 
+  5  	"ID_OWNER" NUMBER
+  6     ) SEGMENT CREATION IMMEDIATE 
+  7    PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+  8    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  9    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+ 10    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+Table "PG_BDTT_DBO01"."RE_BDTT_BCK_ENC" created.
+
+SQL> 
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."RE_BDTT_BCK_ENC"."APPLICATION_DATE" IS 'Fecha de Folicitud';
+
+Comment created.
+
+SQL>    COMMENT ON TABLE "PG_BDTT_DBO01"."RE_BDTT_BCK_ENC"  IS 'Tabla para el Encabezado del Recuest de MARKETS';
+
+Comment created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Table SYS_ROL
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE TABLE "PG_BDTT_DBO01"."SYS_ROL" 
+  2     (	"ID_ROL" NUMBER, 
+  3  	"ROL_NAME" VARCHAR2(256 BYTE), 
+  4  	"REGISTER_DATE" TIMESTAMP (6) WITH TIME ZONE, 
+  5  	"LAST_UPDATE" TIMESTAMP (6) WITH TIME ZONE, 
+  6  	"ACTIVE" CHAR(1 BYTE), 
+  7  	"ID_OWNER" NUMBER(20,0), 
+  8  	"UPDATE_SEQ" NUMBER(15,0)
+  9     ) SEGMENT CREATION IMMEDIATE 
+ 10    PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+ 11    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+ 12    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+ 13    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+Table "PG_BDTT_DBO01"."SYS_ROL" created.
+
+SQL> 
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."SYS_ROL"."ROL_NAME" IS 'Nombre del Rol';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."SYS_ROL"."REGISTER_DATE" IS 'Fecha de Registro';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."SYS_ROL"."LAST_UPDATE" IS 'Fecha de última modificación';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."SYS_ROL"."ACTIVE" IS 'Indicador si esta activo el Usuario. Values : ''Y'' or ''N''';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."SYS_ROL"."ID_OWNER" IS 'Id del Usuario que dio de alta';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."SYS_ROL"."UPDATE_SEQ" IS 'Secuencia de Modificaciones';
+
+Comment created.
+
+SQL>    COMMENT ON TABLE "PG_BDTT_DBO01"."SYS_ROL"  IS 'Registro de Clasificacion de Roles';
+
+Comment created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Table SYS_USER
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE TABLE "PG_BDTT_DBO01"."SYS_USER" 
+  2     (	"ID_USER" NUMBER, 
+  3  	"PASSWD" VARCHAR2(20 BYTE), 
+  4  	"USER_NAME" VARCHAR2(256 BYTE), 
+  5  	"REGISTER_DATE" TIMESTAMP (6) WITH TIME ZONE, 
+  6  	"LAST_UPDATE" TIMESTAMP (6) WITH TIME ZONE, 
+  7  	"ACTIVE" CHAR(1 BYTE) DEFAULT 'Y', 
+  8  	"ID_OWNER" NUMBER(20,0) DEFAULT 0, 
+  9  	"UPDATE_SEQ" NUMBER(15,0)
+ 10     ) SEGMENT CREATION IMMEDIATE 
+ 11    PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+ 12    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+ 13    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+ 14    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+Table "PG_BDTT_DBO01"."SYS_USER" created.
+
+SQL> 
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."SYS_USER"."USER_NAME" IS 'Nombre del Usuario';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."SYS_USER"."REGISTER_DATE" IS 'Fecha de Registro';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."SYS_USER"."LAST_UPDATE" IS 'Fecha de última modificación';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."SYS_USER"."ACTIVE" IS 'Indicador si esta activo el Usuario. Values : ''Y'' or ''N''';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."SYS_USER"."ID_OWNER" IS 'Id del Usuario que dio de alta';
+
+Comment created.
+
+SQL>    COMMENT ON COLUMN "PG_BDTT_DBO01"."SYS_USER"."UPDATE_SEQ" IS 'Secuencia de Modificaciones';
+
+Comment created.
+
+SQL>    COMMENT ON TABLE "PG_BDTT_DBO01"."SYS_USER"  IS 'Registro de Usuarios';
+
+Comment created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Table SYS_USER_ROL
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE TABLE "PG_BDTT_DBO01"."SYS_USER_ROL" 
+  2     (	"ID_USER" NUMBER, 
+  3  	"ID_ROL" NUMBER
+  4     ) SEGMENT CREATION IMMEDIATE 
+  5    PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+  6    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  7    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  8    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+Table "PG_BDTT_DBO01"."SYS_USER_ROL" created.
+
+SQL> 
+SQL>    COMMENT ON TABLE "PG_BDTT_DBO01"."SYS_USER_ROL"  IS 'Relacion Usuarios / Roles';
+
+Comment created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Table XML_LOCAL
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE TABLE "PG_BDTT_DBO01"."XML_LOCAL" 
+  2     (	"RFC" VARCHAR2(36 BYTE), 
+  3  	"ADVERTENCIACLIENTE" VARCHAR2(2000 BYTE), 
+  4  	"CLIENTE" CHAR(1 BYTE), 
+  5  	"CODIGORESPUESTATXT" NUMBER(1,0), 
+  6  	"CVECIFRADA" VARCHAR2(3000 BYTE), 
+  7  	"FECHAHORA" TIMESTAMP (6), 
+  8  	"FIRMA" VARCHAR2(500 BYTE), 
+  9  	"INFOFIRMADO" VARCHAR2(64 BYTE), 
+ 10  	"MENSAJERESPUESTA" VARCHAR2(128 BYTE), 
+ 11  	"NUMSERIECRT" NUMBER(20,0), 
+ 12  	"XMLCIFRADO" VARCHAR2(3000 BYTE)
+ 13     ) SEGMENT CREATION IMMEDIATE 
+ 14    PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+ 15    STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+ 16    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+ 17    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+Table "PG_BDTT_DBO01"."XML_LOCAL" created.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index IDX_CR_CONS_ID_LY_MARKET
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE INDEX "PG_BDTT_DBO01"."IDX_CR_CONS_ID_LY_MARKET" ON "PG_BDTT_DBO01"."CR_CONS" ("ID_LY_MARKETS") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_INDX" ;
+
+Index "PG_BDTT_DBO01"."IDX_CR_CONS_ID_LY_MARKET" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index IDX_CR_CONS_ID_OWNER
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE INDEX "PG_BDTT_DBO01"."IDX_CR_CONS_ID_OWNER" ON "PG_BDTT_DBO01"."CR_CONS" ("ID_OWNER") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_INDX" ;
+
+Index "PG_BDTT_DBO01"."IDX_CR_CONS_ID_OWNER" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index PK_CR_CONS_RFC
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE UNIQUE INDEX "PG_BDTT_DBO01"."PK_CR_CONS_RFC" ON "PG_BDTT_DBO01"."CR_CONS" ("RFC", "PASSWD", "LLAVE") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+INDEX "PG_BDTT_DBO01"."PK_CR_CONS_RFC" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index PK_RP_LOG_ALSIS_ID_ANALIST
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE UNIQUE INDEX "PG_BDTT_DBO01"."PK_RP_LOG_ALSIS_ID_ANALIST" ON "PG_BDTT_DBO01"."LG_ANALIST" ("ID_ANALIST", "ID_BANAMEX", "REGISTER_DATE") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+INDEX "PG_BDTT_DBO01"."PK_RP_LOG_ALSIS_ID_ANALIST" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index IDX_LG_ANALIST_ID_BANAMEX
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE INDEX "PG_BDTT_DBO01"."IDX_LG_ANALIST_ID_BANAMEX" ON "PG_BDTT_DBO01"."LG_ANALIST" ("ID_BANAMEX") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+Index "PG_BDTT_DBO01"."IDX_LG_ANALIST_ID_BANAMEX" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index IDX_LY_AML_ID_OWNER
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE INDEX "PG_BDTT_DBO01"."IDX_LY_AML_ID_OWNER" ON "PG_BDTT_DBO01"."LY_AML" ("ID_OWNER") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_INDX" ;
+
+Index "PG_BDTT_DBO01"."IDX_LY_AML_ID_OWNER" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index PK_LY_FIU_ID_LY_FIU
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE UNIQUE INDEX "PG_BDTT_DBO01"."PK_LY_FIU_ID_LY_FIU" ON "PG_BDTT_DBO01"."LY_AML" ("ID_LY_FIU") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+INDEX "PG_BDTT_DBO01"."PK_LY_FIU_ID_LY_FIU" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index IDX_LY_ICG_DET_ID_LY_ICG_0
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE INDEX "PG_BDTT_DBO01"."IDX_LY_ICG_DET_ID_LY_ICG_0" ON "PG_BDTT_DBO01"."LY_AML_DET" ("ID_LY_FIU") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_INDX" ;
+
+Index "PG_BDTT_DBO01"."IDX_LY_ICG_DET_ID_LY_ICG_0" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index PK_LY_ICG_ID_BANAMEX_1
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE UNIQUE INDEX "PG_BDTT_DBO01"."PK_LY_ICG_ID_BANAMEX_1" ON "PG_BDTT_DBO01"."LY_AML_DET" ("ID_BANAMEX", "GFCID") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+INDEX "PG_BDTT_DBO01"."PK_LY_ICG_ID_BANAMEX_1" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index IDX_LY_CCB_ID_OWNER
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE INDEX "PG_BDTT_DBO01"."IDX_LY_CCB_ID_OWNER" ON "PG_BDTT_DBO01"."LY_CCB" ("ID_OWNER") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_INDX" ;
+
+Index "PG_BDTT_DBO01"."IDX_LY_CCB_ID_OWNER" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index PK_LY_CCB_ID_LY_CCB
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE UNIQUE INDEX "PG_BDTT_DBO01"."PK_LY_CCB_ID_LY_CCB" ON "PG_BDTT_DBO01"."LY_CCB" ("ID_LY_CCB") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+INDEX "PG_BDTT_DBO01"."PK_LY_CCB_ID_LY_CCB" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index IDX_LY_CCB_DET_ID_LY_CCB
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE INDEX "PG_BDTT_DBO01"."IDX_LY_CCB_DET_ID_LY_CCB" ON "PG_BDTT_DBO01"."LY_CCB_DET" ("ID_LY_CCB") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_INDX" ;
+
+Index "PG_BDTT_DBO01"."IDX_LY_CCB_DET_ID_LY_CCB" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index PK_LY_CCB_ID_BANAMEX
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE UNIQUE INDEX "PG_BDTT_DBO01"."PK_LY_CCB_ID_BANAMEX" ON "PG_BDTT_DBO01"."LY_CCB_DET" ("ID_BANAMEX", "GFCID") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+INDEX "PG_BDTT_DBO01"."PK_LY_CCB_ID_BANAMEX" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index IDX_LY_ICG_ID_OWNER
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE INDEX "PG_BDTT_DBO01"."IDX_LY_ICG_ID_OWNER" ON "PG_BDTT_DBO01"."LY_ICG" ("ID_OWNER") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_INDX" ;
+
+Index "PG_BDTT_DBO01"."IDX_LY_ICG_ID_OWNER" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index PK_LY_ICG_ID_LY_ICG
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE UNIQUE INDEX "PG_BDTT_DBO01"."PK_LY_ICG_ID_LY_ICG" ON "PG_BDTT_DBO01"."LY_ICG" ("ID_LY_ICG") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+INDEX "PG_BDTT_DBO01"."PK_LY_ICG_ID_LY_ICG" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index IDX_LY_ICG_DET_ID_LY_ICG
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE INDEX "PG_BDTT_DBO01"."IDX_LY_ICG_DET_ID_LY_ICG" ON "PG_BDTT_DBO01"."LY_ICG_DET" ("ID_LY_ICG") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_INDX" ;
+
+Index "PG_BDTT_DBO01"."IDX_LY_ICG_DET_ID_LY_ICG" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index PK_LY_ICG_ID_BANAMEX_0
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE UNIQUE INDEX "PG_BDTT_DBO01"."PK_LY_ICG_ID_BANAMEX_0" ON "PG_BDTT_DBO01"."LY_ICG_DET" ("ID_BANAMEX", "GFCID") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+INDEX "PG_BDTT_DBO01"."PK_LY_ICG_ID_BANAMEX_0" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index IDX_LY_MARKETS_ID_USER
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE INDEX "PG_BDTT_DBO01"."IDX_LY_MARKETS_ID_USER" ON "PG_BDTT_DBO01"."LY_MARKETS" ("ID_OWNER") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_INDX" ;
+
+Index "PG_BDTT_DBO01"."IDX_LY_MARKETS_ID_USER" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index PK_LY_MARKETS_ID_LY_MARKET
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE UNIQUE INDEX "PG_BDTT_DBO01"."PK_LY_MARKETS_ID_LY_MARKET" ON "PG_BDTT_DBO01"."LY_MARKETS" ("ID_LY_MARKETS") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+INDEX "PG_BDTT_DBO01"."PK_LY_MARKETS_ID_LY_MARKET" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index IDX_LY_MARKETS_D_ID_LY_MARKET
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE INDEX "PG_BDTT_DBO01"."IDX_LY_MARKETS_D_ID_LY_MARKET" ON "PG_BDTT_DBO01"."LY_MARKETS_DET" ("ID_LY_MARKETS") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_INDX" ;
+
+Index "PG_BDTT_DBO01"."IDX_LY_MARKETS_D_ID_LY_MARKET" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index PK_LY_MARKETS_ID_CLIENTE
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE UNIQUE INDEX "PG_BDTT_DBO01"."PK_LY_MARKETS_ID_CLIENTE" ON "PG_BDTT_DBO01"."LY_MARKETS_DET" ("ID_CLIENTE", "ID_BANXICO") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+INDEX "PG_BDTT_DBO01"."PK_LY_MARKETS_ID_CLIENTE" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index PK_LY_MARKETS_DET
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE UNIQUE INDEX "PG_BDTT_DBO01"."PK_LY_MARKETS_DET" ON "PG_BDTT_DBO01"."LY_MARKETS_DET" ("ID_CLIENTE") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+INDEX "PG_BDTT_DBO01"."PK_LY_MARKETS_DET" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index PK_LY_MARKETS_DET_0
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE UNIQUE INDEX "PG_BDTT_DBO01"."PK_LY_MARKETS_DET_0" ON "PG_BDTT_DBO01"."LY_MARKETS_DET" ("ID_BANXICO") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+INDEX "PG_BDTT_DBO01"."PK_LY_MARKETS_DET_0" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index UNQ_RE_BDTT_BCK_ID_BANAMEX
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE UNIQUE INDEX "PG_BDTT_DBO01"."UNQ_RE_BDTT_BCK_ID_BANAMEX" ON "PG_BDTT_DBO01"."RE_BDTT_BCK" ("ID_BANAMEX") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+INDEX "PG_BDTT_DBO01"."UNQ_RE_BDTT_BCK_ID_BANAMEX" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index IDX_RE_BDTT_BCK__ID_USER
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE INDEX "PG_BDTT_DBO01"."IDX_RE_BDTT_BCK__ID_USER" ON "PG_BDTT_DBO01"."RE_BDTT_BCK_ENC" ("ID_OWNER") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_INDX" ;
+
+Index "PG_BDTT_DBO01"."IDX_RE_BDTT_BCK__ID_USER" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index PK_RE_BDTT_BCK__ID_RE_BDTT_B
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE UNIQUE INDEX "PG_BDTT_DBO01"."PK_RE_BDTT_BCK__ID_RE_BDTT_B" ON "PG_BDTT_DBO01"."RE_BDTT_BCK_ENC" ("ID_RE_BDTT_BCK") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+INDEX "PG_BDTT_DBO01"."PK_RE_BDTT_BCK__ID_RE_BDTT_B" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index PK_SYS_ROL_ID_ROL
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE UNIQUE INDEX "PG_BDTT_DBO01"."PK_SYS_ROL_ID_ROL" ON "PG_BDTT_DBO01"."SYS_ROL" ("ID_ROL") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+INDEX "PG_BDTT_DBO01"."PK_SYS_ROL_ID_ROL" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index PK_SYS_USER_ID_USER
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE UNIQUE INDEX "PG_BDTT_DBO01"."PK_SYS_USER_ID_USER" ON "PG_BDTT_DBO01"."SYS_USER" ("ID_USER", "PASSWD") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+INDEX "PG_BDTT_DBO01"."PK_SYS_USER_ID_USER" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index UNQ_SYS_USER_ID_USER
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE UNIQUE INDEX "PG_BDTT_DBO01"."UNQ_SYS_USER_ID_USER" ON "PG_BDTT_DBO01"."SYS_USER" ("ID_USER") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+INDEX "PG_BDTT_DBO01"."UNQ_SYS_USER_ID_USER" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index PK_SYS_USER_ROL_ID_USER
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE UNIQUE INDEX "PG_BDTT_DBO01"."PK_SYS_USER_ROL_ID_USER" ON "PG_BDTT_DBO01"."SYS_USER_ROL" ("ID_USER", "ID_ROL") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+INDEX "PG_BDTT_DBO01"."PK_SYS_USER_ROL_ID_USER" created.
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Index XML_LOCAL_PK
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE UNIQUE INDEX "PG_BDTT_DBO01"."XML_LOCAL_PK" ON "PG_BDTT_DBO01"."XML_LOCAL" ("RFC") 
+  2    PCTFREE 10 INITRANS 2 MAXTRANS 255 
+  3    STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA" ;
+
+INDEX "PG_BDTT_DBO01"."XML_LOCAL_PK" created.
+
+SQL> --------------------------------------------------------
+SQL> --  Constraints for Table CR_CONS
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."CR_CONS" ADD CONSTRAINT "PK_CR_CONS_RFC" PRIMARY KEY ("RFC", "PASSWD", "LLAVE")
+  2    USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA"  ENABLE;
+
+Table "PG_BDTT_DBO01"."CR_CONS" altered.
+
+SQL> --------------------------------------------------------
+SQL> --  Constraints for Table LG_ANALIST
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."LG_ANALIST" ADD CONSTRAINT "PK_RP_LOG_ALSIS_ID_ANALIST" PRIMARY KEY ("ID_ANALIST", "ID_BANAMEX", "REGISTER_DATE")
+  2    USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA"  ENABLE;
+
+Table "PG_BDTT_DBO01"."LG_ANALIST" altered.
+
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."LG_ANALIST" MODIFY ("ID_BANAMEX" NOT NULL ENABLE);
+
+Table "PG_BDTT_DBO01"."LG_ANALIST" altered.
+
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."LG_ANALIST" MODIFY ("ID_ANALIST" NOT NULL ENABLE);
+
+Table "PG_BDTT_DBO01"."LG_ANALIST" altered.
+
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."LG_ANALIST" MODIFY ("REGISTER_DATE" NOT NULL ENABLE);
+
+Table "PG_BDTT_DBO01"."LG_ANALIST" altered.
+
+SQL> --------------------------------------------------------
+SQL> --  Constraints for Table LY_AML
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."LY_AML" ADD CONSTRAINT "PK_LY_FIU_ID_LY_FIU" PRIMARY KEY ("ID_LY_FIU")
+  2    USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA"  ENABLE;
+
+Table "PG_BDTT_DBO01"."LY_AML" altered.
+
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."LY_AML" MODIFY ("ID_LY_FIU" NOT NULL ENABLE);
+
+Table "PG_BDTT_DBO01"."LY_AML" altered.
+
+SQL> --------------------------------------------------------
+SQL> --  Constraints for Table LY_AML_DET
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."LY_AML_DET" ADD CONSTRAINT "PK_LY_ICG_ID_BANAMEX_1" PRIMARY KEY ("ID_BANAMEX", "GFCID")
+  2    USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA"  ENABLE;
+
+Table "PG_BDTT_DBO01"."LY_AML_DET" altered.
+
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."LY_AML_DET" MODIFY ("ID_BANAMEX" NOT NULL ENABLE);
+
+Table "PG_BDTT_DBO01"."LY_AML_DET" altered.
+
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."LY_AML_DET" MODIFY ("GFCID" NOT NULL ENABLE);
+
+Table "PG_BDTT_DBO01"."LY_AML_DET" altered.
+
+SQL> --------------------------------------------------------
+SQL> --  Constraints for Table LY_CCB
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."LY_CCB" ADD CONSTRAINT "PK_LY_CCB_ID_LY_CCB" PRIMARY KEY ("ID_LY_CCB")
+  2    USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA"  ENABLE;
+
+Table "PG_BDTT_DBO01"."LY_CCB" altered.
+
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."LY_CCB" MODIFY ("ID_LY_CCB" NOT NULL ENABLE);
+
+Table "PG_BDTT_DBO01"."LY_CCB" altered.
+
+SQL> --------------------------------------------------------
+SQL> --  Constraints for Table LY_CCB_DET
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."LY_CCB_DET" ADD CONSTRAINT "PK_LY_CCB_ID_BANAMEX" PRIMARY KEY ("ID_BANAMEX", "GFCID")
+  2    USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA"  ENABLE;
+
+Table "PG_BDTT_DBO01"."LY_CCB_DET" altered.
+
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."LY_CCB_DET" MODIFY ("ID_BANAMEX" NOT NULL ENABLE);
+
+Table "PG_BDTT_DBO01"."LY_CCB_DET" altered.
+
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."LY_CCB_DET" MODIFY ("GFCID" NOT NULL ENABLE);
+
+Table "PG_BDTT_DBO01"."LY_CCB_DET" altered.
+
+SQL> --------------------------------------------------------
+SQL> --  Constraints for Table LY_ICG
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."LY_ICG" ADD CONSTRAINT "PK_LY_ICG_ID_LY_ICG" PRIMARY KEY ("ID_LY_ICG")
+  2    USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA"  ENABLE;
+
+Table "PG_BDTT_DBO01"."LY_ICG" altered.
+
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."LY_ICG" MODIFY ("ID_LY_ICG" NOT NULL ENABLE);
+
+Table "PG_BDTT_DBO01"."LY_ICG" altered.
+
+SQL> --------------------------------------------------------
+SQL> --  Constraints for Table LY_ICG_DET
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."LY_ICG_DET" ADD CONSTRAINT "PK_LY_ICG_ID_BANAMEX_0" PRIMARY KEY ("ID_BANAMEX", "GFCID")
+  2    USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA"  ENABLE;
+
+Table "PG_BDTT_DBO01"."LY_ICG_DET" altered.
+
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."LY_ICG_DET" MODIFY ("ID_BANAMEX" NOT NULL ENABLE);
+
+Table "PG_BDTT_DBO01"."LY_ICG_DET" altered.
+
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."LY_ICG_DET" MODIFY ("GFCID" NOT NULL ENABLE);
+
+Table "PG_BDTT_DBO01"."LY_ICG_DET" altered.
+
+SQL> --------------------------------------------------------
+SQL> --  Constraints for Table LY_MARKETS
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."LY_MARKETS" ADD CONSTRAINT "PK_LY_MARKETS_ID_LY_MARKET" PRIMARY KEY ("ID_LY_MARKETS")
+  2    USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA"  ENABLE;
+
+Table "PG_BDTT_DBO01"."LY_MARKETS" altered.
+
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."LY_MARKETS" MODIFY ("ID_LY_MARKETS" NOT NULL ENABLE);
+
+Table "PG_BDTT_DBO01"."LY_MARKETS" altered.
+
+SQL> --------------------------------------------------------
+SQL> --  Constraints for Table LY_MARKETS_DET
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."LY_MARKETS_DET" ADD CONSTRAINT "PK_LY_MARKETS_DET_0" UNIQUE ("ID_BANXICO")
+  2    USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA"  ENABLE;
+
+Table "PG_BDTT_DBO01"."LY_MARKETS_DET" altered.
+
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."LY_MARKETS_DET" ADD CONSTRAINT "PK_LY_MARKETS_DET" UNIQUE ("ID_CLIENTE")
+  2    USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA"  ENABLE;
+
+Table "PG_BDTT_DBO01"."LY_MARKETS_DET" altered.
+
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."LY_MARKETS_DET" MODIFY ("ID_BANXICO" NOT NULL ENABLE);
+
+Table "PG_BDTT_DBO01"."LY_MARKETS_DET" altered.
+
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."LY_MARKETS_DET" ADD CONSTRAINT "PK_LY_MARKETS_ID_CLIENTE" PRIMARY KEY ("ID_CLIENTE", "ID_BANXICO")
+  2    USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA"  ENABLE;
+
+Table "PG_BDTT_DBO01"."LY_MARKETS_DET" altered.
+
+SQL> --------------------------------------------------------
+SQL> --  Constraints for Table RE_BDTT_BCK
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."RE_BDTT_BCK" MODIFY ("ID_BANXICO" NOT NULL ENABLE);
+
+Table "PG_BDTT_DBO01"."RE_BDTT_BCK" altered.
+
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."RE_BDTT_BCK" ADD CONSTRAINT "PK_RE_BDTT_BCK" PRIMARY KEY ("ID_BANAMEX")
+  2    USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA"  ENABLE;
+
+Table "PG_BDTT_DBO01"."RE_BDTT_BCK" altered.
+
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."RE_BDTT_BCK" MODIFY ("ID_BANAMEX" NOT NULL ENABLE);
+
+Table "PG_BDTT_DBO01"."RE_BDTT_BCK" altered.
+
+SQL> --------------------------------------------------------
+SQL> --  Constraints for Table RE_BDTT_BCK_ENC
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."RE_BDTT_BCK_ENC" ADD CONSTRAINT "PK_RE_BDTT_BCK_ENC" PRIMARY KEY ("ID_RE_BDTT_BCK")
+  2    USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA"  ENABLE;
+
+Table "PG_BDTT_DBO01"."RE_BDTT_BCK_ENC" altered.
+
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."RE_BDTT_BCK_ENC" MODIFY ("ID_RE_BDTT_BCK" NOT NULL ENABLE);
+
+Table "PG_BDTT_DBO01"."RE_BDTT_BCK_ENC" altered.
+
+SQL> --------------------------------------------------------
+SQL> --  Constraints for Table SYS_ROL
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."SYS_ROL" ADD CONSTRAINT "PK_SYS_ROL_ID_ROL" PRIMARY KEY ("ID_ROL")
+  2    USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA"  ENABLE;
+
+Table "PG_BDTT_DBO01"."SYS_ROL" altered.
+
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."SYS_ROL" MODIFY ("ID_ROL" NOT NULL ENABLE);
+
+Table "PG_BDTT_DBO01"."SYS_ROL" altered.
+
+SQL> --------------------------------------------------------
+SQL> --  Constraints for Table SYS_USER
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."SYS_USER" ADD CONSTRAINT "PK_SYS_USER_ID_USER" PRIMARY KEY ("ID_USER", "PASSWD")
+  2    USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA"  ENABLE;
+
+Table "PG_BDTT_DBO01"."SYS_USER" altered.
+
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."SYS_USER" MODIFY ("PASSWD" NOT NULL ENABLE);
+
+Table "PG_BDTT_DBO01"."SYS_USER" altered.
+
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."SYS_USER" MODIFY ("ID_USER" NOT NULL ENABLE);
+
+Table "PG_BDTT_DBO01"."SYS_USER" altered.
+
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."SYS_USER" ADD CONSTRAINT "UNQ_SYS_USER_ID_USER" UNIQUE ("ID_USER")
+  2    USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA"  ENABLE;
+
+Table "PG_BDTT_DBO01"."SYS_USER" altered.
+
+SQL> --------------------------------------------------------
+SQL> --  Constraints for Table SYS_USER_ROL
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."SYS_USER_ROL" ADD CONSTRAINT "PK_SYS_USER_ROL_ID_USER" PRIMARY KEY ("ID_USER", "ID_ROL")
+  2    USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  3    STORAGE(INITIAL 131072 NEXT 131072 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA"  ENABLE;
+
+Table "PG_BDTT_DBO01"."SYS_USER_ROL" altered.
+
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."SYS_USER_ROL" MODIFY ("ID_ROL" NOT NULL ENABLE);
+
+Table "PG_BDTT_DBO01"."SYS_USER_ROL" altered.
+
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."SYS_USER_ROL" MODIFY ("ID_USER" NOT NULL ENABLE);
+
+Table "PG_BDTT_DBO01"."SYS_USER_ROL" altered.
+
+SQL> --------------------------------------------------------
+SQL> --  Constraints for Table XML_LOCAL
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."XML_LOCAL" ADD CONSTRAINT "XML_LOCAL_PK" PRIMARY KEY ("RFC")
+  2    USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 
+  3    STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  4    PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  5    TABLESPACE "T_TXN_BDTT_DATA"  ENABLE;
+
+Table "PG_BDTT_DBO01"."XML_LOCAL" altered.
+
+SQL>   ALTER TABLE "PG_BDTT_DBO01"."XML_LOCAL" MODIFY ("RFC" NOT NULL ENABLE);
+
+Table "PG_BDTT_DBO01"."XML_LOCAL" altered.
+
+SQL> 
+SQL> 
+SQL>   commit;
+
+Commit complete.
+
