@@ -1,0 +1,16 @@
+Hola a todos.
+
+Si requieren algún otro dato por favor avísenme.
+
+IP: 10.62.133.189
+server: LAPTOP-0KCOTA18
+Gestor de colas: MXCSPEIDPRUEBA
+Queue=QL.CITI.RESPONSE.001
+Queue=QL.CITI.RESPONSE.002
+Queue=QL.CITI.RESPONSE.003
+Queue=QL.CITI.REQUEST.001
+Queue=QL.CITI.REQUEST.002
+QueuePort=2015
+CANAL DE ADMINISTRACION DEL QUEUE MANAGER: SYSTEM.ADMIN.SVRCONN
+
+Saludos a todos.
