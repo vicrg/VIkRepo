@@ -1,0 +1,15 @@
+pantalla de Dashboard el gran total solo va en dolares+
+si es sans no contabilizar en las pantallas
+para formato de export debe ser general en caso de no tener los datos por el tipo d epago debe ir vacio.
+pendiente la extención del archivo de export
+crear una tabla de calogos de respuesta 
+dar un knowledge de que que los datos estan correctos 
+8 de la noche para mandar a teradata 
+status fantasma como estado de inicio para encolamiento
+el punto anterior y el de reintento se toma como no respuesta
+sans son 6 reintentos y es configurable si pasa esto se regresa un perfect match
+todo lo que no ha sido dictaminada(edo fantasma y reintento de Citi) se deben de procesar por sans
+CRear un nuevo estatus para las operaciones que no valida Sans y se contesta como passed aplica lo mismo para las operaciones en caso de contingencia
+revisar con Omar como funciona el sans
+a que transacciones se les da prioridad a las encoladas o a las que van llegando ....
+Hablar con omar para ver los equipos de dev sit uat de citiScreening
