@@ -1,0 +1,78 @@
+package mq;
+
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.Properties;
+
+public  class DistConfig {
+	public String AppName = null;
+	public String IntervalInSeconds = null;
+	
+	public String DBConnStr = null;
+	public String DBUserName = null;
+	public String DBPassword = null;
+	
+	public String SANSOutQueueManager=null;
+	public String SANSOutQueue=null;
+	public String SANSOutQueueServer=null;
+	public String SANSOutQueuePort=null;
+	public String SANSOutQueueChannel=null;
+	public String SANSOutQueueUser=null;
+	public String SANSOutQueuePassword=null;
+	public String SANSOutQueueReplyTo=null;
+
+	public String SANSInQueueManager=null;
+	public String SANSInQueue=null;
+	public String SANSInQueueServer=null;
+	public String SANSInQueuePort=null;
+	public String SANSInQueueChannel=null;
+	public String SANSInQueueUser=null;
+	public String SANSInQueuePassword=null;
+	public String SANSInQueueReplyTo=null;
+
+	public DistConfig(String configPath) throws Exception {
+		Properties prop = new Properties();
+		InputStream input = null;
+
+		input = new FileInputStream(configPath);
+
+		// load a properties files
+		prop.load(input);
+
+		// get the property value and print it out
+		this.AppName = getProperty(prop, "AppName", true);
+		this.IntervalInSeconds = getProperty(prop, "IntervalInSeconds", true);
+		
+		this.DBConnStr = getProperty(prop, "DBConnStr", true);
+		this.DBUserName = getProperty(prop, "DBUserName", true);
+		this.DBPassword = getProperty(prop, "DBPassword", true);
+
+		this.SANSOutQueueManager = getProperty(prop, "SANSOutQueueManager", true);
+		this.SANSOutQueue = getProperty(prop, "SANSOutQueue", true);
+		this.SANSOutQueueServer = getProperty(prop, "SANSOutQueueServer", true);
+		this.SANSOutQueuePort = getProperty(prop, "SANSOutQueuePort", true);
+		this.SANSOutQueueChannel = getProperty(prop, "SANSOutQueueChannel", true);
+		this.SANSOutQueueReplyTo = getProperty(prop, "SANSOutQueueReplyTo", true);
+		//this.SANSOutQueueUser = getProperty(prop, "SANSOutQueueUser", true);
+		//this.SANSOutQueuePassword = getProperty(prop, "SANSOutQueuePassword", true);
+		
+		this.SANSInQueueManager = getProperty(prop, "SANSInQueueManager", true);
+		this.SANSInQueue = getProperty(prop, "SANSInQueue", true);
+		this.SANSInQueueServer = getProperty(prop, "SANSInQueueServer", true);
+		this.SANSInQueuePort = getProperty(prop, "SANSInQueuePort", true);
+		this.SANSInQueueChannel = getProperty(prop, "SANSInQueueChannel", true);
+		//this.SANSInQueueUser = getProperty(prop, "SANSInQueueUser", true);
+		//this.SANSInQueuePassword = getProperty(prop, "SANSInQueuePassword", true);
+
+		input.close();
+	}
+
+	public String getProperty(Properties prop, String name, boolean print) {
+		String value = prop.getProperty(name);
+		if (print) {
+			System.out.println(name + "=" + value);
+		}
+		return value;
+	}
+	
+}
