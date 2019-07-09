@@ -1,0 +1,352 @@
+package mq;
+
+
+import java.math.BigInteger;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+
+
+//Last Updated 28Apr2016 1652 VDI Time
+public class Distribucion {
+	public DistConfig config = null;
+	DistQueue sansQueue = null;
+	public HashMap<String, String> txnSent = new HashMap<String, String>();		
+	  HashMap<String, String> transax = new HashMap<String, String>();
+
+	public Distribucion(String configPath) throws Exception {
+		config = new DistConfig(configPath);
+		sansQueue = new DistQueue(config);
+	}
+
+	public Connection getDBConnection() throws Exception {
+		Class.forName("oracle.jdbc.driver.OracleDriver");
+		Connection connection = null;
+		connection = DriverManager.getConnection(this.config.DBConnStr,
+				this.config.DBUserName, this.config.DBPassword);
+
+		return connection;
+	}
+
+	
+	public int setDBInsertClientes(Connection conn, String idOperacion, String opcion, String cuenta, String idSimilares)
+			throws Exception {
+		
+		 PreparedStatement stmt = null;
+		 String idInsert="";
+		 BigInteger idSinCeros = new BigInteger(idOperacion);
+		
+		//sop(query);
+		stmt = conn.prepareStatement("INSERT INTO CLOUDAPP.CTAS_FORMAT (ID_264, NUM_CUENTA_EXT, ID_SIMILARES_EXT, ESTATUS_BMX, ESTATUS_EXT) VALUES (?,?,?,?,?)");		
+		stmt.setString(1, String.valueOf(idSinCeros));
+		stmt.setString(2, cuenta);
+		stmt.setString(3, idSimilares);
+		stmt.setString(4, "A");
+		stmt.setString(5, "A");
+	
+		int recordsAffected = stmt.executeUpdate();
+		sop("Records Affected : " + recordsAffected);
+		 
+		stmt.close();
+		return recordsAffected;
+	}
+
+	
+	public String setDBIdSelectExt(Connection conn, String cuenta, String opcion )
+			throws Exception {
+		Statement stmt = null;
+		char[] aCaracteres = cuenta.toCharArray();
+		char zero = '0';
+		int posicion = 0;
+		String cuentaEncontrada="";
+		String cuentaSinCeros="";
+		
+		
+			for (int i = 0; i < aCaracteres.length; i++) {
+				if (aCaracteres[i] != zero) {
+					posicion = i;
+					cuentaSinCeros = cuenta
+							.substring(posicion, cuenta.length());
+					break;
+				}
+			}
+			if (posicion < 17) {
+				String query = "SELECT CUENTA FROM CLOUDAPP.CTES_EXTERNOS WHERE CUENTA LIKE '%"
+						+ cuentaSinCeros + "%'";
+				sop(query);
+				stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(query);
+				while (rs.next()) {
+					cuentaEncontrada = rs.getString(1);
+				}
+		
+					
+		}
+		return cuentaEncontrada;
+	}
+
+	
+	public String setDBIdSelectBmx(Connection conn, String cuenta, String opcion )
+			throws Exception {
+		Statement stmt = null;
+		char[] aCaracteres = cuenta.toCharArray();
+		char zero = '0';
+		int posicion = 0;
+		String cuentaEncontrada="";
+		String cuentaSinCeros="";
+		
+		
+			for (int i = 0; i < aCaracteres.length; i++) {
+				if (aCaracteres[i] != zero) {
+					posicion = i;
+					cuentaSinCeros = cuenta
+							.substring(posicion, cuenta.length());
+					break;
+				}
+			}
+			if (posicion < 17) {
+				String query = "SELECT CUENTA FROM CLOUDAPP.CTES_BMX_3 WHERE CUENTA LIKE '%"
+						+ cuentaSinCeros + "%'";
+				sop(query);
+				stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(query);
+				while (rs.next()) {
+					cuentaEncontrada = rs.getString(1);
+				}
+		
+					
+		}
+		return cuentaEncontrada;
+	}
+	
+	public void sop(Object msg) {
+		if (this.config == null) {
+			System.out.println(msg);
+		} else {
+			System.out.println(this.config.AppName + ":" + msg);
+		}
+	}
+
+	public void doSend() throws Exception {
+		
+		try {
+		//	guardaDb();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} 
+	}
+
+	public void doRecv() throws Exception {
+		Connection conn = null;
+		try {
+			sop("-----------------------STARTING-----------------------");
+
+			sop("-----------------------GET RESPONSE FROM QUEUE-----------------------");
+
+			ArrayList<String> response = new ArrayList<String>();
+
+			response = sansQueue.readFromMQ();
+			sop("Received Responses : " + response.size());
+			//response.add("0001MXBanamex   0870      S264-6503 S264      17        000000000006503                              00000000000000000000000000000000010000000000001409306020161804161257590001NS    AS0                                                                                                                                                                                      00000000010000000000001409152400");
+
+			if (response.size() > 0) {
+				sop("-----------------------CONNECTING TO DB-----------------------");
+				conn = getDBConnection();
+
+				for (int i = 0; i < response.size(); i++) {
+				
+					// adding a hardcoded header coz parser is designed to use
+					// header but response does not have a header , instead it
+					// has 0001 before the message	
+					//String originalMessage = response.get(i);
+					String originalMessage = response.get(i);
+					String message = response.get(i) ;
+					boolean noExiste = false;
+					boolean datIncorrectos = false;
+					String cuenta = "";
+					String idOperacion = "";
+					String opcion = "";
+					String idSimilares = "";
+					String cadenaCompleta="";
+					String existeExt="";
+				    String existeBmx="";
+					int transaxOk=0;
+					sop("-----------------------RESPONSE FROM CDAS-----------------------");
+					sop("[" + message + "]");
+					sop("-----------------------PARSING RESPONSE-----------------------");
+					
+					noExiste = originalMessage.contains("REGISTRO NO EXISTE EN LA BASE CONT.");
+					datIncorrectos = originalMessage.contains("DATOS");
+					
+					if ((!noExiste) && (!datIncorrectos) ){
+						//cuenta = message.substring(64,84);
+						idOperacion = message.substring(0,11);
+						opcion = message.substring(11,13);
+						cuenta = message.substring(13,33);
+						idSimilares = message.substring(33,message.length());
+						//setDBStatusUpdate(conn,idMessage ,"1" );
+						try {
+							transaxOk=setDBInsertClientes(conn,idOperacion,opcion,cuenta,idSimilares);
+							
+								existeExt = setDBIdSelectExt(conn, cuenta, opcion);
+								existeBmx=  setDBIdSelectBmx(conn, cuenta, opcion);
+								
+								if (!existeExt.equals("")){
+									setDBStatusUpdateExt(conn,idOperacion,existeExt );
+								}
+							
+								
+								if (!existeBmx.equals("")){
+									setDBStatusUpdateBmx(conn,idOperacion,existeBmx );
+								}
+							
+							
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						if (transaxOk ==1){
+							//transax ok continue
+							sop("-----------------------TRANSAX OK-----------------------");
+						}else{
+							sop("-----------------------TRANSAX FAIL-----------------------");
+						}
+						
+					}else {
+						 
+						
+					}
+					
+
+					sop("RESPONSE RECEIVED FROM CDAS: [" + originalMessage + "]");
+					
+					if (cuenta.equals("") || idOperacion.equals("")) {
+						sop("-----------------------ERRRRRRRRRRRRRRRRRRRRRRRR-----------------------");
+						if (originalMessage.length() > 122) {
+						//	idMessage = message.substring(114, 122);
+						}
+						if (noExiste && !datIncorrectos){
+							//idMessage = message.substring(114,122);
+							//setDBStatusUpdate(conn,idMessage ,"2" );
+						}else{
+							if (!noExiste && datIncorrectos){
+								//setDBStatusUpdate(conn,idMessage ,"3" );	
+							}else{
+								//setDBStatusUpdate(conn,idMessage ,"4" );
+							}
+							
+						}
+						
+						
+						
+					} else {
+						//	transax.put(cuenta, tipoCuenta+ "|" + numCliente + "|" + nombreCliente+"|"+rfc + "|" + idMessage + "|" + cadenaCompleta);
+							//guardaDb(); 
+						
+					}
+			}
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (Exception jmsex) {
+					sop("Connection could not be closed.");
+				}
+			}
+		}
+	}
+	
+	public void guardaDb() throws Exception{
+		Connection conn = null;
+		String cuenta = "";
+		String tipoCuenta = "";
+		String numCliente = "";
+		String nombreCliente = "";
+		String rfc ="";
+		String idMessage ="";
+		String tranx  ="";
+		
+		try {
+			conn = getDBConnection();
+			
+			if (transax.size()>0){
+		
+			}else{
+				sop("Mapa Buffer vacio ->" + transax.size());
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (Exception jmsex) {
+					sop("Connection could not be closed.");
+				}
+			}
+		}
+		
+		
+	}
+	
+	public int setDBStatusUpdateExt(Connection conn, String TxnId, String cuentaExt )
+			throws Exception {
+		Statement stmt = null;
+		BigInteger idSinCeros = new BigInteger(TxnId);
+		String idSinCero = String.valueOf(idSinCeros);
+		String query = "UPDATE CLOUDAPP.CTAS_FORMAT SET ESTATUS_EXT = '" +  "B"  + "' WHERE ID_264= '"+ idSinCero  + "'";
+		sop(query);
+		stmt = conn.createStatement();
+		int recordsAffected = stmt.executeUpdate(query);
+		sop("Records Affected : " + recordsAffected);
+		stmt.close();
+		return recordsAffected;
+	}
+	
+	public int setDBStatusUpdateBmx(Connection conn, String TxnId, String cuentaExt )
+			throws Exception {
+		Statement stmt = null;
+		BigInteger idSinCeros = new BigInteger(TxnId);
+		String idSinCero = String.valueOf(idSinCeros);
+		String query = "UPDATE CLOUDAPP.CTAS_FORMAT SET ESTATUS_BMX = '" +  "B"  + "' WHERE ID_264= '"+ idSinCero  + "'";
+		sop(query);
+		stmt = conn.createStatement();
+		int recordsAffected = stmt.executeUpdate(query);
+		sop("Records Affected : " + recordsAffected);
+		stmt.close();
+		return recordsAffected;
+	}
+	
+	
+	public static void main(String[] args) throws Exception {
+
+		Distribucion dist = new Distribucion("dist.config");
+
+		while (true) {
+			
+			//sans.doSend();
+			///Thread.sleep(1000);
+			
+			dist.doRecv();
+			//System.out.println("-----------------------SLEEPING FOR "
+				//	+ sans.config.IntervalInSeconds
+				//	+ " SECONDS " + (new Date()) + " -----------------------");
+			Thread.sleep(Integer.parseInt(dist.config.IntervalInSeconds) * 1000);
+			
+
+		}
+	}
+}
